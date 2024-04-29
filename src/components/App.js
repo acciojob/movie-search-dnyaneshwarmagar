@@ -9,7 +9,8 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState('');
 
-  const handleSearch = () => {
+  const handleSearch = (event) => {
+    event.preventDefault(); // Prevents the form from submitting and refreshing the page
     setError('');
     fetch(`${API_URL}s=${query}`)
       .then((response) => response.json())
@@ -30,27 +31,27 @@ function App() {
   return (
     <div className="app">
       <h1>Movie Search</h1>
-      <div className="search-bar">
+      <form onSubmit={handleSearch}>
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search for a movie..."
         />
-        <button onClick={handleSearch}>Search</button>
-      </div>
+        <button type="submit">Search</button>
+      </form>
       {error && <p className="error">{error}</p>}
-      <div className="movies">
+      <ul className="movies">
         {movies.map((movie) => (
-          <div key={movie.imdbID} className="movie">
+          <li key={movie.imdbID} className="movie">
             <img src={movie.Poster} alt={movie.Title} />
             <div>
               <h3>{movie.Title}</h3>
               <p>{movie.Year}</p>
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
